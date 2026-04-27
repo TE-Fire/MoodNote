@@ -1,0 +1,171 @@
+/* 全局样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+/* 容器 */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 按钮 */
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #409EFF;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #66B1FF;
+}
+
+.btn-success {
+  background-color: #67C23A;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background-color: #85CE61;
+}
+
+.btn-danger {
+  background-color: #F56C6C;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #F78989;
+}
+
+/* 表单 */
+.form {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.form-item {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #409EFF;
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+/* 卡片 */
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* 标题 */
+h1, h2, h3, h4, h5, h6 {
+  color: #333;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+/* 链接 */
+a {
+  color: #409EFF;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #66B1FF;
+  text-decoration: underline;
+}
+
+/* 加载中 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  font-size: 14px;
+  color: #999;
+}
+
+/* 空状态 */
+.empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 14px;
+  color: #999;
+}
+
+/* 错误信息 */
+.error {
+  color: #F56C6C;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* 成功信息 */
+.success {
+  color: #67C23A;
+  font-size: 12px;
+  margin-top: 4px;
+}
