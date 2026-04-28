@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -25,27 +25,27 @@ const router = createRouter({
     },
     {
       path: '/diary/create',
-      name: 'diaryCreate',
+      name: 'diary-create',
       component: () => import('../views/DiaryCreate.vue')
     },
     {
       path: '/diary/:id',
-      name: 'diaryDetail',
+      name: 'diary-detail',
       component: () => import('../views/DiaryDetail.vue')
     },
     {
       path: '/diary/edit/:id',
-      name: 'diaryEdit',
+      name: 'diary-edit',
       component: () => import('../views/DiaryEdit.vue')
     },
     {
       path: '/stats/calendar',
-      name: 'statsCalendar',
+      name: 'stats-calendar',
       component: () => import('../views/StatsCalendar.vue')
     },
     {
       path: '/stats/trend',
-      name: 'statsTrend',
+      name: 'stats-trend',
       component: () => import('../views/StatsTrend.vue')
     }
   ]
