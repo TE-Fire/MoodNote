@@ -1,0 +1,427 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "MoodNote API",
+    "description": "晚风记事 API 文档",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "本地开发环境"
+    }
+  ],
+  "tags": [
+    {
+      "name": "认证模块",
+      "description": "用户认证相关接口"
+    },
+    {
+      "name": "用户模块",
+      "description": "用户信息相关接口"
+    }
+  ],
+  "paths": {
+    "/api/auth/captcha": {
+      "get": {
+        "tags": ["认证模块"],
+        "summary": "获取图形验证码",
+        "description": "获取图形验证码，返回Base64图片和验证码key",
+        "responses": {
+          "200": {
+            "description": "操作成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "操作成功" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "captchaKey": { "type": "string", "example": "abc123def456" },
+                        "captchaImage": { "type": "string", "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAA..." }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/send-code": {
+      "post": {
+        "tags": ["认证模块"],
+        "summary": "发送邮箱验证码",
+        "description": "发送邮箱验证码，支持注册和重置密码两种类型",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "description": "邮箱地址", "example": "user@example.com" },
+                  "type": { "type": "string", "description": "类型: register/reset", "example": "register" }
+                },
+                "required": ["email", "type"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "验证码发送成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "验证码发送成功" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "邮箱已被注册",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 1001 },
+                    "message": { "type": "string", "example": "该邮箱已被注册" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": ["认证模块"],
+        "summary": "用户注册",
+        "description": "新用户注册，需要邮箱验证码",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string", "description": "用户名 (3-50个字符)", "example": "testuser" },
+                  "password": { "type": "string", "description": "密码 (至少6位)", "example": "123456" },
+                  "email": { "type": "string", "description": "邮箱地址", "example": "user@example.com" },
+                  "code": { "type": "string", "description": "邮箱验证码", "example": "123456" },
+                  "nickname": { "type": "string", "description": "昵称", "example": "测试用户" }
+                },
+                "required": ["username", "password", "email", "code"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "注册成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "注册成功" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "用户已存在或验证码错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 1001 },
+                    "message": { "type": "string", "example": "用户已存在" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["认证模块"],
+        "summary": "用户登录",
+        "description": "用户登录，支持用户名或邮箱登录，需要图形验证码",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string", "description": "用户名或邮箱", "example": "testuser" },
+                  "password": { "type": "string", "description": "密码", "example": "123456" },
+                  "captcha": { "type": "string", "description": "图形验证码", "example": "ABCD" },
+                  "captchaKey": { "type": "string", "description": "验证码key", "example": "abc123def456" }
+                },
+                "required": ["username", "password", "captcha", "captchaKey"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "操作成功" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoidGVzdHVzZXIiLCJpYXQiOjE3MTUwNzAwMDAsImV4cCI6MTcxNTE1NjQwMH0.example" },
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "integer", "example": 1 },
+                            "username": { "type": "string", "example": "testuser" },
+                            "email": { "type": "string", "example": "user@example.com" },
+                            "nickname": { "type": "string", "example": "测试用户" },
+                            "avatar": { "type": "string", "example": null },
+                            "phone": { "type": "string", "example": null },
+                            "gender": { "type": "integer", "example": 0 },
+                            "lastLoginTime": { "type": "string", "format": "date-time", "example": "2026-05-06T18:30:00" },
+                            "createTime": { "type": "string", "format": "date-time", "example": "2026-05-01T10:00:00" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "登录失败",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 1004 },
+                    "message": { "type": "string", "example": "验证码错误" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["认证模块"],
+        "summary": "用户登出",
+        "description": "用户登出，需要Bearer Token",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "退出成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "退出成功" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          }
+        }
+      }
+    },
+    "/api/auth/reset-password": {
+      "post": {
+        "tags": ["认证模块"],
+        "summary": "重置密码",
+        "description": "通过邮箱验证码重置密码",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "description": "邮箱地址", "example": "user@example.com" },
+                  "code": { "type": "string", "description": "邮箱验证码", "example": "123456" },
+                  "newPassword": { "type": "string", "description": "新密码 (至少6位)", "example": "654321" }
+                },
+                "required": ["email", "code", "newPassword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "密码重置成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "密码重置成功" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "用户不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 1002 },
+                    "message": { "type": "string", "example": "用户不存在" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/info": {
+      "get": {
+        "tags": ["用户模块"],
+        "summary": "获取当前用户信息",
+        "description": "获取当前登录用户的信息",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "操作成功" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 1 },
+                        "username": { "type": "string", "example": "testuser" },
+                        "email": { "type": "string", "example": "user@example.com" },
+                        "nickname": { "type": "string", "example": "测试用户" },
+                        "avatar": { "type": "string", "example": null },
+                        "phone": { "type": "string", "example": null },
+                        "gender": { "type": "integer", "example": 0 },
+                        "lastLoginTime": { "type": "string", "format": "date-time", "example": "2026-05-06T18:30:00" },
+                        "createTime": { "type": "string", "format": "date-time", "example": "2026-05-01T10:00:00" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          }
+        }
+      }
+    },
+    "/api/user/profile": {
+      "put": {
+        "tags": ["用户模块"],
+        "summary": "更新用户信息",
+        "description": "更新当前用户的个人信息",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nickname": { "type": "string", "description": "昵称", "example": "新昵称" },
+                  "avatar": { "type": "string", "description": "头像URL", "example": "https://example.com/avatar.jpg" },
+                  "phone": { "type": "string", "description": "手机号", "example": "13800138000" },
+                  "gender": { "type": "integer", "description": "性别: 0未知/1男/2女", "example": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "更新成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "更新成功" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "输入JWT Token，格式: Bearer {token}"
+      }
+    }
+  }
+}
