@@ -1,3 +1,4 @@
+-- Active: 1763051471221@@127.0.0.1@3306@moodnote
 CREATE DATABASE IF NOT EXISTS moodnote CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE moodnote;
