@@ -11,8 +11,9 @@ public enum ErrorCode {
     NOT_FOUND(404, "资源不存在"),
     INTERNAL_ERROR(500, "服务器内部错误"),
     BUSINESS_ERROR(501, "业务逻辑错误"),
-    AI_SERVICE_ERROR(502, "AI 服务错误");
-
+    AI_SERVICE_ERROR(502, "AI 服务错误"),
+    EMAIL_SERVICE_ERROR(503, "邮件服务错误");
+    
     private final int code;
     private final String message;
 
