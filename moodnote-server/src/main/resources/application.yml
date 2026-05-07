@@ -1,12 +1,12 @@
 # Spring Boot 主配置文件
-# 包含应用基础配置、数据源、邮件、MyBatis-Plus、JWT 等配置
+# 包含应用基础配置、数据源、邮件、MyBatis、JWT 等配置
 
 # ==================== Spring 基础配置 ====================
 spring:
   # 应用名称，用于标识当前应用
   application:
     name: moodnote-server
-  
+
   # ==================== 数据源配置 ====================
   # 配置 MySQL 数据库连接信息
   datasource:
@@ -20,10 +20,10 @@ spring:
     # 数据库用户名
     username: root
     # 数据库密码（生产环境应使用环境变量或密钥管理）
-    password: 123456
+    password: wangxu8044
     # MySQL JDBC 驱动类（MySQL 8.0+ 使用 com.mysql.cj.jdbc.Driver）
     driver-class-name: com.mysql.cj.jdbc.Driver
-  
+
   # ==================== Jackson JSON 配置 ====================
   # 配置 JSON 序列化和反序列化规则
   jackson:
@@ -31,7 +31,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     # 时区设置为上海时间
     time-zone: Asia/Shanghai
-  
+
   # ==================== 邮件配置（QQ邮箱） ====================
   # 配置 SMTP 邮件发送服务，用于发送验证码等功能
   mail:
@@ -55,24 +55,15 @@ spring:
           starttls:
             enable: true
 
-# ==================== MyBatis-Plus 配置 ====================
-# MyBatis-Plus 是 MyBatis 的增强工具，提供 CRUD 等便捷功能
-mybatis-plus:
+# ==================== MyBatis 配置 ====================
+# MyBatis ORM 框架配置
+mybatis:
   # Mapper XML 文件的扫描路径
   mapper-locations: classpath:mapper/**/*.xml
   # 实体类的包路径，用于自动扫描实体
   type-aliases-package: com.moodnote.pojo.entity
-  # 全局配置
-  global-config:
-    db-config:
-      # 主键生成策略：auto 表示使用数据库自增
-      id-type: auto
-      # 逻辑删除字段名（软删除标记字段）
-      logic-delete-field: deleted
-      # 逻辑删除值（表示已删除）
-      logic-delete-value: 1
-      # 逻辑未删除值（表示正常）
-      logic-not-delete-value: 0
+  # MyBatis 配置文件路径
+  config-location: classpath:mybatis-config.xml
 
 # ==================== 服务器配置 ====================
 server:
