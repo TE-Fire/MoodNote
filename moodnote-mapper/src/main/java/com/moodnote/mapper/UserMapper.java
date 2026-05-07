@@ -1,10 +1,11 @@
 package com.moodnote.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.moodnote.pojo.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-public interface UserMapper extends BaseMapper<User> {
+@Mapper
+public interface UserMapper {
 
     User selectByUsername(@Param("username") String username);
 
