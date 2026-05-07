@@ -7,6 +7,13 @@ spring:
   application:
     name: moodnote-server
 
+  # ==================== Redis 配置 ====================
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 2
+      timeout: 60s
   # ==================== 数据源配置 ====================
   # 配置 MySQL 数据库连接信息
   datasource:
