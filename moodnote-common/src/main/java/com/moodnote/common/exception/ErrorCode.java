@@ -15,7 +15,8 @@ public enum ErrorCode {
     EMAIL_SERVICE_ERROR(503, "邮件服务错误"),
     CODE_TO_IMAGE_ERROR(504, "验证码转换为图片失败"),
     CODE_EXPIRE(505, "验证码已过期，请重新获取"),
-    CODE_ERROR(506, "验证码错误");
+    CODE_ERROR(506, "验证码错误"),
+    EMAIL_EXISTED(507, "邮箱已存在");
     
     private final int code;
     private final String message;
