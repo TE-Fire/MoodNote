@@ -58,7 +58,9 @@ Content-Type: application/json
 ```json
 {
   "email": "user@example.com",
-  "type": "register"
+  "type": "register",
+  "captcha": "ABCD",
+  "captchaKey": "abc123def456"
 }
 ```
 
@@ -66,7 +68,9 @@ Content-Type: application/json
 | 字段名 | 类型 | 必填 | 说明 |
 |-------|------|------|------|
 | email | String | 是 | 邮箱地址 |
-| type | String | 是 | 类型: register(注册) / reset(重置密码) |
+| type | String | 是 | 类型: register(注册) / reset(重置密码) / login(登录) |
+| captcha | String | 是 | 图形验证码 |
+| captchaKey | String | 是 | 图形验证码key |
 
 #### 响应示例
 **成功响应**:
@@ -109,8 +113,6 @@ Content-Type: application/json
   "password": "123456",
   "email": "user@example.com",
   "code": "123456",
-  "captcha": "ABCD",
-  "captchaKey": "abc123def456",
   "nickname": "测试用户"
 }
 ```
@@ -122,8 +124,6 @@ Content-Type: application/json
 | password | String | 是 | 密码 (至少6位) |
 | email | String | 是 | 邮箱地址 |
 | code | String | 是 | 邮箱验证码 |
-| captcha | String | 是 | 图形验证码 |
-| captchaKey | String | 是 | 图形验证码key |
 | nickname | String | 否 | 昵称 |
 
 #### 响应示例

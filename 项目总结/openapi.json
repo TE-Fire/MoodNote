@@ -64,9 +64,11 @@
                 "type": "object",
                 "properties": {
                   "email": { "type": "string", "description": "邮箱地址", "example": "user@example.com" },
-                  "type": { "type": "string", "description": "类型: register/reset", "example": "register" }
+                  "type": { "type": "string", "description": "类型: register/reset/login", "example": "register" },
+                  "captcha": { "type": "string", "description": "图形验证码", "example": "ABCD" },
+                  "captchaKey": { "type": "string", "description": "图形验证码key", "example": "abc123def456" }
                 },
-                "required": ["email", "type"]
+                "required": ["email", "type", "captcha", "captchaKey"]
               }
             }
           }
@@ -120,11 +122,9 @@
                   "password": { "type": "string", "description": "密码 (至少6位)", "example": "123456" },
                   "email": { "type": "string", "description": "邮箱地址", "example": "user@example.com" },
                   "code": { "type": "string", "description": "邮箱验证码", "example": "123456" },
-                  "captcha": { "type": "string", "description": "图形验证码", "example": "ABCD" },
-                  "captchaKey": { "type": "string", "description": "图形验证码key", "example": "abc123def456" },
                   "nickname": { "type": "string", "description": "昵称", "example": "测试用户" }
                 },
-                "required": ["username", "password", "email", "code", "captcha", "captchaKey"]
+                "required": ["username", "password", "email", "code"]
               }
             }
           }
