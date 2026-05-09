@@ -18,6 +18,8 @@ public class MessageConstant {
     public static final String USERNAME_EXISTED = "用户名已存在";
     public static final String REGISTER_SUCCESS = "注册成功";
 
+    public static final String USERNAME_NOT_FOUND = "用户名不存在";
+    public static final String PASSWORD_ERROR = "密码错误";
 
     public static final String LOGIN = "login";
     public static final String RESET = "reset";
