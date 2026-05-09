@@ -2,6 +2,7 @@ package com.moodnote.service;
 
 import com.moodnote.common.utils.Result;
 import com.moodnote.pojo.dto.SendCodeDTO;
+import com.moodnote.pojo.vo.CaptchaVO;
 
 public interface AuthService {
 
@@ -20,4 +21,18 @@ public interface AuthService {
      * @return 是否验证成功
      */
     boolean verifyCode(String email, String type, String inputCode);
+
+    /**
+     * 获取图形验证码
+     * @return
+     */
+    CaptchaVO getCaptcha();
+
+    /**
+     * 验证图形验证码
+     * @param captchaKey 验证码key
+     * @param captchaImg 验证码图片
+     * @return 是否验证成功
+     */
+    boolean verifyCaptcha(String captchaKey, String inputCode);
 }
