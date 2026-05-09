@@ -7,14 +7,17 @@ import com.moodnote.common.constant.RedisKeyConstant;
 import com.moodnote.common.exception.BusinessException;
 import com.moodnote.common.exception.ErrorCode;
 import com.moodnote.common.utils.EmailUtil;
+import com.moodnote.common.utils.JwtTokenUtil;
 import com.moodnote.common.utils.RandomCodeUtil;
 import com.moodnote.common.utils.RedisUtil;
 import com.moodnote.common.utils.Result;
 import com.moodnote.mapper.UserMapper;
+import com.moodnote.pojo.dto.LoginDTO;
 import com.moodnote.pojo.dto.RegisterDTO;
 import com.moodnote.pojo.dto.SendCodeDTO;
 import com.moodnote.pojo.entity.User;
 import com.moodnote.pojo.vo.CaptchaVO;
+import com.moodnote.pojo.vo.LoginVO;
 import com.moodnote.service.AuthService;
 
 import cn.hutool.core.lang.UUID;
@@ -52,8 +55,13 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
 
+    /**
+     * 发送验证码
+     */
     @Override
     public Result<Void> sendCode(SendCodeDTO sendCodeDTO) {
         // 验证图形验证码
@@ -85,11 +93,11 @@ public class AuthServiceImpl implements AuthService {
         } else {
             return Result.error(MessageConstant.CODE_SEND_FAILED);
         }
-    }
+    }   
 
-
-   
-
+    /**
+     * 获取图形验证码
+     */
     @Override
     public CaptchaVO getCaptcha() {
         // 1. 生成验证码文本
@@ -164,6 +172,35 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("用户注册成功，用户名：{}，邮箱：{}", registerDTO.getUsername(), registerDTO.getEmail());
         return Result.success(MessageConstant.REGISTER_SUCCESS);
+    }
+
+    @Override
+    public Result<LoginVO> login(LoginDTO loginDTO) {
+        // 1. 校验验证码
+        if (!verifyCaptcha(loginDTO.getCaptchaKey(), loginDTO.getCaptcha())) {
+            return Result.error(MessageConstant.CODE_ERROR);
+        }
+        // 2. 检验用户是否存在
+        User user = userMapper.selectByUsername(loginDTO.getUsername());
+
+        if (user == null) {
+            return Result.error(MessageConstant.USERNAME_NOT_FOUND);
+        }
+
+        // 3. 校验密码
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
+            return Result.error(MessageConstant.PASSWORD_ERROR);
+        }
+
+        // 4. 生成token
+        String token = jwtTokenUtil.generateToken(user.getUsername(), user.getId());
+        user.setLastLoginTime(LocalDateTime.now());
+        // 4. 构建返回对象
+        LoginVO loginVO = new LoginVO();
+        loginVO.setToken(token);
+        loginVO.setUser(user);
+
+        return Result.success(loginVO);
     }
 
     /**

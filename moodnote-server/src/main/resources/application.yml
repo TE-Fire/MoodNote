@@ -93,6 +93,6 @@ knife4j:
 # JWT（JSON Web Token）用于无状态身份认证
 jwt:
   # JWT 签名密钥（生产环境应使用安全的随机密钥）
-  secret: moodnote-secret-key-2024
+  secret: your-256-bit-secret-key-must-be-at-least-32-characters-long
   # Token 过期时间（毫秒），86400000 表示 24 小时
   expiration: 86400000

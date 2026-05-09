@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moodnote.common.utils.Result;
+import com.moodnote.pojo.dto.LoginDTO;
 import com.moodnote.pojo.dto.RegisterDTO;
 import com.moodnote.pojo.dto.SendCodeDTO;
 import com.moodnote.pojo.vo.CaptchaVO;
+import com.moodnote.pojo.vo.LoginVO;
 import com.moodnote.service.AuthService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +52,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public Result<Void> register(@RequestBody RegisterDTO registerDTO) {
+        log.info("注册用户: {}", registerDTO);
         return authService.register(registerDTO);
+    }
+
+    @PostMapping("/login")
+    public Result<LoginVO> login(@RequestBody LoginDTO loginDTO) {
+        log.info("登录用户: {}", loginDTO);
+        return authService.login(loginDTO);
     }
 }
