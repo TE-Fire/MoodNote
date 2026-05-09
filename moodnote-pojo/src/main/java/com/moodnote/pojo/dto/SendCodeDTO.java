@@ -13,4 +13,10 @@ public class SendCodeDTO {
 
     @NotBlank(message = "类型不能为空")
     private String type;
+
+    @NotBlank(message = "验证码key不能为空")
+    private String captchaKey;
+
+    @NotBlank(message = "验证码不能为空")
+    private String captcha;
 }
