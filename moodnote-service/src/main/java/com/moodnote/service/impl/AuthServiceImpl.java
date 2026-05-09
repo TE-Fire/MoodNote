@@ -10,7 +10,10 @@ import com.moodnote.common.utils.EmailUtil;
 import com.moodnote.common.utils.RandomCodeUtil;
 import com.moodnote.common.utils.RedisUtil;
 import com.moodnote.common.utils.Result;
+import com.moodnote.mapper.UserMapper;
+import com.moodnote.pojo.dto.RegisterDTO;
 import com.moodnote.pojo.dto.SendCodeDTO;
+import com.moodnote.pojo.entity.User;
 import com.moodnote.pojo.vo.CaptchaVO;
 import com.moodnote.service.AuthService;
 
@@ -19,12 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -41,9 +46,24 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private DefaultKaptcha defaultKaptcha;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
 
     @Override
     public Result<Void> sendCode(SendCodeDTO sendCodeDTO) {
+        // 验证图形验证码
+        String captchaKey = sendCodeDTO.getCaptchaKey();
+        String captcha = sendCodeDTO.getCaptcha();
+
+        if (!verifyCaptcha(captchaKey, captcha)) {
+            return Result.error(MessageConstant.CODE_ERROR);
+        }
+
         String email = sendCodeDTO.getEmail();
         String type = sendCodeDTO.getType();
         
@@ -68,10 +88,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-    @Override
-    public boolean verifyCode(String email, String type, String inputCode) {
-        return false;
-    }
+   
 
     @Override
     public CaptchaVO getCaptcha() {
@@ -107,8 +124,55 @@ public class AuthServiceImpl implements AuthService {
         return captchaVO;
     }
 
+    
+
+    /**
+     * 注册
+     * @param registerDTO
+     * @return
+     */
     @Override
-    public boolean verifyCaptcha(String captchaKey, String inputCode) {
+    public Result<Void> register(RegisterDTO registerDTO) {
+        // 1. 检查用户名是否已存在
+        if (userMapper.existByUsername(registerDTO.getUsername())) {
+            return Result.error(MessageConstant.USERNAME_EXISTED);
+        }
+
+        // 3. 检查邮箱是否已注册
+        if (userMapper.existByEmail(registerDTO.getEmail())) {
+            return Result.error(MessageConstant.EMAIL_EXISTED);
+        }
+
+        // 3. 验证邮箱验证码
+        if (!verifyCode(registerDTO.getEmail(), MessageConstant.REGISTER, registerDTO.getCode())) {
+            return Result.error(MessageConstant.CODE_ERROR);
+        }
+
+        // 4. 创建用户实体
+        User user = new User();
+        user.setUsername(registerDTO.getUsername());
+        user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));  // 密码加密
+        user.setEmail(registerDTO.getEmail());
+        user.setNickname(registerDTO.getNickname() != null ? registerDTO.getNickname() : registerDTO.getUsername());
+        user.setAvatar(null);
+        user.setGender(0);
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+
+        // 5. 保存到数据库
+        userMapper.insert(user);
+
+        log.info("用户注册成功，用户名：{}，邮箱：{}", registerDTO.getUsername(), registerDTO.getEmail());
+        return Result.success(MessageConstant.REGISTER_SUCCESS);
+    }
+
+    /**
+     * 验证图形验证码
+     * @param captchaKey
+     * @param inputCode
+     * @return
+     */
+    private boolean verifyCaptcha(String captchaKey, String inputCode) {
         // 1. 从redis中获取验证码文本
         String storedCode = redisUtil.get(RedisKeyConstant.getCaptchaKey(captchaKey), String.class);
         
@@ -124,5 +188,34 @@ public class AuthServiceImpl implements AuthService {
              captchaKey, inputCode, storedCode);
         
         return false;
+    }
+
+    /**
+     * 验证邮箱验证码
+     * @param email 邮箱地址
+     * @param type 类型（register/login/reset）
+     * @param inputCode 用户输入的验证码
+     * @return 验证是否成功
+     */
+    private boolean verifyCode(String email, String type, String inputCode) {
+        // 1. 从redis中获取验证码文本
+        String storedCode = redisUtil.get(RedisKeyConstant.getVerificationKey(type, email), String.class);
+        
+        // 2. 检查验证码是否存在（过期或不存在）
+        if (storedCode == null) {
+            log.warn("邮箱验证码已过期或不存在，email: {}, type: {}", email, type);
+            return false;
+        }
+        
+        // 3. 检查验证码是否正确
+        if (!storedCode.equalsIgnoreCase(inputCode)) {
+            log.warn("邮箱验证码错误，email: {}, input: {}, stored: {}", email, inputCode, storedCode);
+            return false;
+        }
+        
+        // 4. 验证成功，删除redis中的验证码（防止重复使用）
+        redisUtil.delete(RedisKeyConstant.getVerificationKey(type, email));
+        log.info("邮箱验证码验证成功，email: {}, type: {}", email, type);
+        return true;
     }
 }

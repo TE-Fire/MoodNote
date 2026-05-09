@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.moodnote.common.utils.Result;
+import com.moodnote.pojo.dto.RegisterDTO;
 import com.moodnote.pojo.dto.SendCodeDTO;
 import com.moodnote.pojo.vo.CaptchaVO;
 import com.moodnote.service.AuthService;
@@ -27,14 +28,28 @@ public class AuthController {
     @Autowired
     private AuthService authService;
     
+    /**
+     * 发送验证码邮件
+     * @param sendCodeDTO
+     * @return
+     */
     @PostMapping("/send-code")
     public Result<Void> sendCode(@RequestBody SendCodeDTO sendCodeDTO) {
         return authService.sendCode(sendCodeDTO);
     }
 
+    /**
+     * 获取图形验证码
+     * @return
+     */
     @GetMapping("/captcha")
     public Result<CaptchaVO> getCaptcha() {
         log.info("获取图形验证码");
         return Result.success(authService.getCaptcha());
+    }
+
+    @PostMapping("/register")
+    public Result<Void> register(@RequestBody RegisterDTO registerDTO) {
+        return authService.register(registerDTO);
     }
 }
