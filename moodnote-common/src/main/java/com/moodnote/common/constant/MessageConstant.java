@@ -11,6 +11,10 @@ public class MessageConstant {
     public static final String CODE_EXPIRE = "验证码已过期，请重新获取";
     public static final String CODE_ERROR = "验证码错误";
 
+    public static final String CODE_TO_IMAGE_ERROR = "验证码转换为图片失败，请联系管理员";
+    public static final String CODE_TO_IMAGE_SUCCESS = "验证码转换为图片成功";
+
+    
     public static final String LOGIN = "login";
     public static final String RESET = "reset";
     public static final String REGISTER = "register";
