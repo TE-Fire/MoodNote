@@ -109,6 +109,8 @@ Content-Type: application/json
   "password": "123456",
   "email": "user@example.com",
   "code": "123456",
+  "captcha": "ABCD",
+  "captchaKey": "abc123def456",
   "nickname": "测试用户"
 }
 ```
@@ -120,6 +122,8 @@ Content-Type: application/json
 | password | String | 是 | 密码 (至少6位) |
 | email | String | 是 | 邮箱地址 |
 | code | String | 是 | 邮箱验证码 |
+| captcha | String | 是 | 图形验证码 |
+| captchaKey | String | 是 | 图形验证码key |
 | nickname | String | 否 | 昵称 |
 
 #### 响应示例
@@ -280,6 +284,8 @@ Content-Type: application/json
 {
   "email": "user@example.com",
   "code": "123456",
+  "captcha": "ABCD",
+  "captchaKey": "abc123def456",
   "newPassword": "654321"
 }
 ```
@@ -289,6 +295,8 @@ Content-Type: application/json
 |-------|------|------|------|
 | email | String | 是 | 邮箱地址 |
 | code | String | 是 | 邮箱验证码 |
+| captcha | String | 是 | 图形验证码 |
+| captchaKey | String | 是 | 图形验证码key |
 | newPassword | String | 是 | 新密码 (至少6位) |
 
 #### 响应示例
