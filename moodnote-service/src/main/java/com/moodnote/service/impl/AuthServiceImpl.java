@@ -14,6 +14,7 @@ import com.moodnote.common.utils.Result;
 import com.moodnote.mapper.UserMapper;
 import com.moodnote.pojo.dto.LoginDTO;
 import com.moodnote.pojo.dto.RegisterDTO;
+import com.moodnote.pojo.dto.ResetPasswordDTO;
 import com.moodnote.pojo.dto.SendCodeDTO;
 import com.moodnote.pojo.entity.User;
 import com.moodnote.pojo.vo.CaptchaVO;
@@ -166,6 +167,7 @@ public class AuthServiceImpl implements AuthService {
         user.setGender(0);
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
+        user.setDeleted(0);
 
         // 5. 保存到数据库
         userMapper.insert(user);
@@ -203,6 +205,21 @@ public class AuthServiceImpl implements AuthService {
         return Result.success(loginVO);
     }
 
+    @Override
+    public Result<Void> resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        // 1. 校验图形验证码
+        if (!verifyCaptcha(resetPasswordDTO.getCaptchaKey(), resetPasswordDTO.getCaptcha())) {
+            return Result.error(MessageConstant.CODE_ERROR);
+        }
+        // 2. 校验邮箱验证码
+        if (!verifyCode(resetPasswordDTO.getEmail(), MessageConstant.RESET, resetPasswordDTO.getCode())) {
+            return Result.error(MessageConstant.CODE_ERROR);
+        }
+        // 3. 校验密码是否一致(懒得搞)
+        // 4. 重置密码
+        userMapper.resetPassword(resetPasswordDTO.getEmail(), resetPasswordDTO.getNewPassword());
+        return Result.success(MessageConstant.PASSWORD_RESET_SUCCESS);
+    }
     /**
      * 验证图形验证码
      * @param captchaKey

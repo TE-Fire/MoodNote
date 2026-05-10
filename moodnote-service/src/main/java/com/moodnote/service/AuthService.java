@@ -3,6 +3,7 @@ package com.moodnote.service;
 import com.moodnote.common.utils.Result;
 import com.moodnote.pojo.dto.LoginDTO;
 import com.moodnote.pojo.dto.RegisterDTO;
+import com.moodnote.pojo.dto.ResetPasswordDTO;
 import com.moodnote.pojo.dto.SendCodeDTO;
 import com.moodnote.pojo.vo.CaptchaVO;
 import com.moodnote.pojo.vo.LoginVO;
@@ -37,4 +38,12 @@ public interface AuthService {
      * @return
      */
     Result<LoginVO> login(LoginDTO loginDTO);
+
+
+    /**
+     * 重置密码
+     * @param resetPasswordDTO
+     * @return
+     */
+    Result<Void> resetPassword(ResetPasswordDTO resetPasswordDTO);
 }

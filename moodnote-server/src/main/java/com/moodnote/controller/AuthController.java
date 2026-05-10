@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.moodnote.common.utils.Result;
 import com.moodnote.pojo.dto.LoginDTO;
 import com.moodnote.pojo.dto.RegisterDTO;
+import com.moodnote.pojo.dto.ResetPasswordDTO;
 import com.moodnote.pojo.dto.SendCodeDTO;
 import com.moodnote.pojo.vo.CaptchaVO;
 import com.moodnote.pojo.vo.LoginVO;
@@ -60,5 +61,16 @@ public class AuthController {
     public Result<LoginVO> login(@RequestBody LoginDTO loginDTO) {
         log.info("登录用户: {}", loginDTO);
         return authService.login(loginDTO);
+    }
+
+    /**
+     * 重置密码
+     * @param resetPasswordDTO
+     * @return
+     */
+    @PostMapping("/reset-password")
+    public Result<Void> resetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        log.info("重置密码: {}", resetPasswordDTO);
+        return authService.resetPassword(resetPasswordDTO);
     }
 }
