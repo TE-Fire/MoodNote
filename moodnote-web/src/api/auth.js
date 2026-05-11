@@ -10,7 +10,7 @@ import api from '../utils/request'
  * @returns {Promise} 返回包含 captchaKey 和 captchaImg 的对象
  */
 export const getCaptcha = () => {
-  return api.get('/api/auth/captcha')
+  return api.get('/auth/captcha')
 }
 
 /**
@@ -23,7 +23,7 @@ export const getCaptcha = () => {
  * @returns {Promise} 返回包含 token 和 user 的对象
  */
 export const login = (data) => {
-  return api.post('/api/auth/login', {
+  return api.post('/auth/login', {
     username: data.username,
     password: data.password,
     captcha: data.captcha,
@@ -42,7 +42,7 @@ export const login = (data) => {
  * @returns {Promise} 返回注册结果
  */
 export const register = (data) => {
-  return api.post('/api/auth/register', {
+  return api.post('/auth/register', {
     username: data.username,
     password: data.password,
     email: data.email,
@@ -61,7 +61,7 @@ export const register = (data) => {
  * @returns {Promise} 返回发送结果
  */
 export const sendCode = (data) => {
-  return api.post('/api/auth/send-code', {
+  return api.post('/auth/send-code', {
     email: data.email,
     type: data.type,
     captcha: data.captcha,
@@ -74,7 +74,7 @@ export const sendCode = (data) => {
  * @returns {Promise} 返回登出结果
  */
 export const logout = () => {
-  return api.post('/api/auth/logout')
+  return api.post('/auth/logout')
 }
 
 /**
@@ -88,7 +88,7 @@ export const logout = () => {
  * @returns {Promise} 返回重置结果
  */
 export const resetPassword = (data) => {
-  return api.post('/api/auth/reset-password', {
+  return api.post('/auth/reset-password', {
     email: data.email,
     code: data.code,
     captcha: data.captcha,
@@ -102,7 +102,7 @@ export const resetPassword = (data) => {
  * @returns {Promise} 返回用户信息对象
  */
 export const getUserInfo = () => {
-  return api.get('/api/user/info')
+  return api.get('/user/info')
 }
 
 /**
@@ -115,5 +115,5 @@ export const getUserInfo = () => {
  * @returns {Promise} 返回更新结果
  */
 export const updateUserInfo = (data) => {
-  return api.put('/api/user/profile', data)
+  return api.put('/user/profile', data)
 }
