@@ -46,4 +46,10 @@ public interface AuthService {
      * @return
      */
     Result<Void> resetPassword(ResetPasswordDTO resetPasswordDTO);
+
+    /**
+     * 退出登录
+     * @return
+     */
+    Result<Void> logout();
 }

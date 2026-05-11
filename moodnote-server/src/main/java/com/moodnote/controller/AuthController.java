@@ -73,4 +73,14 @@ public class AuthController {
         log.info("重置密码: {}", resetPasswordDTO);
         return authService.resetPassword(resetPasswordDTO);
     }
+
+    /**
+     * 退出登录
+     * @return
+     */
+    @PostMapping("/logout")
+    public Result<Void> logout() {
+        log.info("退出登录");
+        return authService.logout();
+    }
 }

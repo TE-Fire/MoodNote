@@ -22,6 +22,8 @@ import com.moodnote.pojo.vo.LoginVO;
 import com.moodnote.service.AuthService;
 
 import cn.hutool.core.lang.UUID;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.image.BufferedImage;
@@ -35,6 +37,8 @@ import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 @Slf4j
@@ -197,7 +201,12 @@ public class AuthServiceImpl implements AuthService {
         // 4. 生成token
         String token = jwtTokenUtil.generateToken(user.getUsername(), user.getId());
         user.setLastLoginTime(LocalDateTime.now());
-        // 4. 构建返回对象
+        
+        // 5. 将token存储到Redis（可选，用于多端登录控制）
+        redisUtil.set(RedisKeyConstant.getUserTokenKey(user.getId()), token, 
+            DataConstant.TOKEN_EXPIRE_TIME, TimeUnit.HOURS);
+        
+        // 6. 构建返回对象
         LoginVO loginVO = new LoginVO();
         loginVO.setToken(token);
         loginVO.setUser(user);
@@ -220,6 +229,7 @@ public class AuthServiceImpl implements AuthService {
         userMapper.resetPassword(resetPasswordDTO.getEmail(), resetPasswordDTO.getNewPassword());
         return Result.success(MessageConstant.PASSWORD_RESET_SUCCESS);
     }
+
     /**
      * 验证图形验证码
      * @param captchaKey
@@ -271,5 +281,64 @@ public class AuthServiceImpl implements AuthService {
         redisUtil.delete(RedisKeyConstant.getVerificationKey(type, email));
         log.info("邮箱验证码验证成功，email: {}, type: {}", email, type);
         return true;
+    }
+
+    /**
+     * 退出登录
+     * 将当前用户的token加入黑名单，使其失效
+     */
+    @Override
+    public Result<Void> logout() {
+        // 1. 从请求头中获取token
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes == null) {
+            return Result.error(MessageConstant.LOGOUT_FAILED);
+        }
+        
+        String token = extractTokenFromRequest(attributes.getRequest());
+        if (token == null) {
+            return Result.error(MessageConstant.UNAUTHORIZED);
+        }
+        
+        try {
+            // 2. 获取用户ID（用于清理用户的token记录）
+            Long userId = jwtTokenUtil.extractUserId(token);
+            
+            // 3. 将token加入黑名单（过期时间设置为与JWT过期时间一致）
+            String blackKey = RedisKeyConstant.getBlacklistKey(token);
+            redisUtil.set(blackKey, "1", DataConstant.TOKEN_EXPIRE_TIME, TimeUnit.HOURS);
+            
+            // 4. 删除用户的token记录（如果存在）
+            if (userId != null) {
+                redisUtil.delete(RedisKeyConstant.getUserTokenKey(userId));
+            }
+            
+            log.info("用户退出登录成功，userId: {}", userId);
+            return Result.success(MessageConstant.LOGOUT_SUCCESS);
+            
+        } catch (Exception e) {
+            log.error("退出登录失败: {}", e.getMessage());
+            return Result.error(MessageConstant.LOGOUT_FAILED);
+        }
+    }
+    
+    /**
+     * 从请求中提取token
+     */
+    private String extractTokenFromRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+        
+       Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
