@@ -35,7 +35,7 @@ request.interceptors.response.use(
         duration: 3000
       })
       
-      if (res.code === 401) {
+      if (res.code === 401 || res.code === 402) {
         localStorage.removeItem('token')
         window.location.href = '/login'
       }
