@@ -29,5 +29,8 @@ public class MessageConstant {
     public static final String RESET = "reset";
     public static final String REGISTER = "register";
 
+    public static final String LOGOUT_SUCCESS = "退出登录成功";
+    public static final String LOGOUT_FAILED = "退出登录失败";
+
 
 }
