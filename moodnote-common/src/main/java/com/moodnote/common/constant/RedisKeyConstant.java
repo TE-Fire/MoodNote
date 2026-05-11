@@ -12,6 +12,8 @@ public class RedisKeyConstant {
 
     private static final String VERIFICATION = "verification";
 
+    private static final String BLACKLIST = "blacklist";
+
     public static String getVerificationKey(String type, String email) {
         return PROJECT_PREFIX + ":" + AUTH_MODULE + ":" + VERIFICATION + ":" + type + ":" + email;
     }
@@ -38,5 +40,9 @@ public class RedisKeyConstant {
 
     public static String getCaptchaKey(String uuid) {
         return PROJECT_PREFIX + ":" + AUTH_MODULE + ":captcha:" + uuid;
+    }
+
+    public static String getBlacklistKey(String token) {
+        return PROJECT_PREFIX + ":" + AUTH_MODULE + ":" + BLACKLIST + ":" + token;
     }
 }

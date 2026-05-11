@@ -7,6 +7,7 @@ public class MessageConstant {
     public static final String EMAIL_EXISTED = "邮箱已存在";
     public static final String EMAIL_FORMAT_ERROR = "邮箱格式不正确";
     public static final String EMAIL_EMPTY = "邮箱不能为空";
+
     public static final String CODE_SEND_SUCCESS = "验证码发送成功，请查收邮件";
     public static final String CODE_SEND_FAILED = "发送失败，请稍后重试";
     public static final String CODE_EXPIRE = "验证码已过期，请重新获取";
@@ -19,6 +20,8 @@ public class MessageConstant {
     public static final String REGISTER_SUCCESS = "注册成功";
     public static final String PASSWORD_RESET_SUCCESS = "密码重置成功";
 
+    public static final String UNAUTHORIZED = "未授权，请先登录";
+    public static final String TOKEN_BLACKLIST = "用户已登出，请重新登录";
     public static final String USERNAME_NOT_FOUND = "用户名不存在";
     public static final String PASSWORD_ERROR = "密码错误";
 
