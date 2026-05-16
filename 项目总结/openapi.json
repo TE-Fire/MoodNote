@@ -19,6 +19,14 @@
     {
       "name": "用户模块",
       "description": "用户信息相关接口"
+    },
+    {
+      "name": "日记模块",
+      "description": "日记相关接口"
+    },
+    {
+      "name": "标签模块",
+      "description": "标签相关接口"
     }
   ],
   "paths": {
@@ -413,6 +421,539 @@
           },
           "401": {
             "description": "未授权"
+          }
+        }
+      }
+    },
+    "/api/diary": {
+      "post": {
+        "tags": ["日记模块"],
+        "summary": "创建日记",
+        "description": "创建新日记，支持关联标签",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string", "description": "日记标题", "example": "今天心情不错" },
+                  "content": { "type": "string", "description": "日记内容", "example": "今天天气很好，心情也很棒！" },
+                  "moodType": { "type": "integer", "description": "情绪类型: 1开心/2平静/3难过/4焦虑/5生气", "example": 1 },
+                  "weatherType": { "type": "integer", "description": "天气类型: 1晴/2多云/3阴/4雨/5雪", "example": 1 },
+                  "city": { "type": "string", "description": "城市", "example": "北京" },
+                  "isPrivate": { "type": "integer", "description": "是否私密: 0公开/1私密", "example": 1 },
+                  "tagIds": { "type": "array", "items": { "type": "integer" }, "description": "标签ID列表", "example": [1, 2, 3] }
+                },
+                "required": ["title", "content", "moodType", "weatherType"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "创建成功" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 1 },
+                        "title": { "type": "string", "example": "今天心情不错" },
+                        "content": { "type": "string", "example": "今天天气很好，心情也很棒！" },
+                        "moodType": { "type": "integer", "example": 1 },
+                        "weatherType": { "type": "integer", "example": 1 },
+                        "city": { "type": "string", "example": "北京" },
+                        "isPrivate": { "type": "integer", "example": 1 },
+                        "createTime": { "type": "string", "format": "date-time", "example": "2026-05-16T10:30:00" },
+                        "updateTime": { "type": "string", "format": "date-time", "example": "2026-05-16T10:30:00" },
+                        "tags": { "type": "array", "items": { "type": "object" } }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          }
+        }
+      }
+    },
+    "/api/diary/{id}": {
+      "get": {
+        "tags": ["日记模块"],
+        "summary": "获取日记详情",
+        "description": "获取指定日记的详细信息",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "日记ID",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "操作成功" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 1 },
+                        "title": { "type": "string", "example": "今天心情不错" },
+                        "content": { "type": "string", "example": "今天天气很好，心情也很棒！" },
+                        "moodType": { "type": "integer", "example": 1 },
+                        "weatherType": { "type": "integer", "example": 1 },
+                        "city": { "type": "string", "example": "北京" },
+                        "isPrivate": { "type": "integer", "example": 1 },
+                        "createTime": { "type": "string", "format": "date-time", "example": "2026-05-16T10:30:00" },
+                        "updateTime": { "type": "string", "format": "date-time", "example": "2026-05-16T10:30:00" },
+                        "tags": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "integer", "example": 1 },
+                              "name": { "type": "string", "example": "开心" },
+                              "color": { "type": "string", "example": "#409EFF" },
+                              "createTime": { "type": "string", "format": "date-time", "example": "2026-05-01T10:00:00" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          },
+          "404": {
+            "description": "日记不存在"
+          }
+        }
+      },
+      "put": {
+        "tags": ["日记模块"],
+        "summary": "更新日记",
+        "description": "更新指定日记的信息",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "日记ID",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string", "description": "日记标题", "example": "今天心情不错（修改后）" },
+                  "content": { "type": "string", "description": "日记内容", "example": "今天天气很好，心情也很棒！" },
+                  "moodType": { "type": "integer", "description": "情绪类型", "example": 2 },
+                  "weatherType": { "type": "integer", "description": "天气类型" },
+                  "city": { "type": "string", "description": "城市" },
+                  "isPrivate": { "type": "integer", "description": "是否私密" },
+                  "tagIds": { "type": "array", "items": { "type": "integer" }, "description": "标签ID列表" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "更新成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "更新成功" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          },
+          "404": {
+            "description": "日记不存在"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["日记模块"],
+        "summary": "删除日记",
+        "description": "删除指定日记",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "日记ID",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "删除成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "删除成功" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          },
+          "404": {
+            "description": "日记不存在"
+          }
+        }
+      }
+    },
+    "/api/diary/list": {
+      "get": {
+        "tags": ["日记模块"],
+        "summary": "获取日记列表",
+        "description": "获取当前用户的日记列表，支持分页和筛选",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "description": "关键词搜索",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "moodType",
+            "in": "query",
+            "description": "情绪类型筛选",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "weatherType",
+            "in": "query",
+            "description": "天气类型筛选",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "开始日期",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "结束日期",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "pageNum",
+            "in": "query",
+            "description": "页码",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "每页数量",
+            "schema": { "type": "integer", "default": 10 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "操作成功" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "list": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "integer", "example": 1 },
+                              "title": { "type": "string", "example": "今天心情不错" },
+                              "content": { "type": "string", "example": "今天天气很好..." },
+                              "moodType": { "type": "integer", "example": 1 },
+                              "weatherType": { "type": "integer", "example": 1 },
+                              "city": { "type": "string", "example": "北京" },
+                              "isPrivate": { "type": "integer", "example": 1 },
+                              "createTime": { "type": "string", "format": "date-time", "example": "2026-05-16T10:30:00" },
+                              "updateTime": { "type": "string", "format": "date-time", "example": "2026-05-16T10:30:00" },
+                              "tags": { "type": "array", "items": { "type": "object" } }
+                            }
+                          }
+                        },
+                        "total": { "type": "integer", "example": 1 },
+                        "pageNum": { "type": "integer", "example": 1 },
+                        "pageSize": { "type": "integer", "example": 10 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          }
+        }
+      }
+    },
+    "/api/tag": {
+      "post": {
+        "tags": ["标签模块"],
+        "summary": "创建标签",
+        "description": "创建新标签",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "description": "标签名称", "example": "开心" },
+                  "color": { "type": "string", "description": "标签颜色", "example": "#409EFF" }
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "创建成功" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 1 },
+                        "name": { "type": "string", "example": "开心" },
+                        "color": { "type": "string", "example": "#409EFF" },
+                        "createTime": { "type": "string", "format": "date-time", "example": "2026-05-16T10:30:00" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          }
+        }
+      }
+    },
+    "/api/tag/list": {
+      "get": {
+        "tags": ["标签模块"],
+        "summary": "获取标签列表",
+        "description": "获取当前用户的所有标签",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "操作成功" },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "integer", "example": 1 },
+                          "name": { "type": "string", "example": "开心" },
+                          "color": { "type": "string", "example": "#409EFF" },
+                          "createTime": { "type": "string", "format": "date-time", "example": "2026-05-01T10:00:00" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          }
+        }
+      }
+    },
+    "/api/tag/{id}": {
+      "put": {
+        "tags": ["标签模块"],
+        "summary": "更新标签",
+        "description": "更新指定标签的信息",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "标签ID",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "description": "标签名称", "example": "非常开心" },
+                  "color": { "type": "string", "description": "标签颜色", "example": "#67C23A" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "更新成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "更新成功" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          },
+          "404": {
+            "description": "标签不存在"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["标签模块"],
+        "summary": "删除标签",
+        "description": "删除指定标签",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "标签ID",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "删除成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "integer", "example": 200 },
+                    "message": { "type": "string", "example": "删除成功" },
+                    "data": { "type": "null" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权"
+          },
+          "404": {
+            "description": "标签不存在"
           }
         }
       }

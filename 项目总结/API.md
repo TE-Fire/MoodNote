@@ -405,6 +405,418 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ---
 
+---
+
+## 3. 日记模块
+
+### 3.1 创建日记
+
+#### 接口信息
+- **接口路径**: `/api/diary`
+- **请求方法**: `POST`
+- **是否需要认证**: 是
+
+#### 请求参数
+**Headers**:
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Body** (JSON):
+```json
+{
+  "title": "今天心情不错",
+  "content": "今天天气很好，心情也很棒！",
+  "moodType": 1,
+  "weatherType": 1,
+  "city": "北京",
+  "isPrivate": 1,
+  "tagIds": [1, 2, 3]
+}
+```
+
+#### 请求字段说明
+| 字段名 | 类型 | 必填 | 说明 |
+|-------|------|------|------|
+| title | String | 是 | 日记标题 (1-100个字符) |
+| content | String | 是 | 日记内容 |
+| moodType | Integer | 是 | 情绪类型: 1开心/2平静/3难过/4焦虑/5生气 |
+| weatherType | Integer | 是 | 天气类型: 1晴/2多云/3阴/4雨/5雪 |
+| city | String | 否 | 城市 |
+| isPrivate | Integer | 否 | 是否私密: 0公开/1私密 (默认1) |
+| tagIds | List<Long> | 否 | 标签ID列表 |
+
+#### 响应示例
+```json
+{
+  "code": 200,
+  "message": "创建成功",
+  "data": {
+    "id": 1,
+    "title": "今天心情不错",
+    "content": "今天天气很好，心情也很棒！",
+    "moodType": 1,
+    "weatherType": 1,
+    "city": "北京",
+    "isPrivate": 1,
+    "createTime": "2026-05-16 10:30:00",
+    "updateTime": "2026-05-16 10:30:00",
+    "tags": []
+  }
+}
+```
+
+---
+
+### 3.2 获取日记详情
+
+#### 接口信息
+- **接口路径**: `/api/diary/{id}`
+- **请求方法**: `GET`
+- **是否需要认证**: 是
+
+#### 请求参数
+**Headers**:
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Path参数**:
+| 参数名 | 类型 | 说明 |
+|-------|------|------|
+| id | Long | 日记ID |
+
+#### 响应示例
+```json
+{
+  "code": 200,
+  "message": "操作成功",
+  "data": {
+    "id": 1,
+    "title": "今天心情不错",
+    "content": "今天天气很好，心情也很棒！",
+    "moodType": 1,
+    "weatherType": 1,
+    "city": "北京",
+    "isPrivate": 1,
+    "createTime": "2026-05-16 10:30:00",
+    "updateTime": "2026-05-16 10:30:00",
+    "tags": [
+      {
+        "id": 1,
+        "name": "开心",
+        "color": "#409EFF",
+        "createTime": "2026-05-01 10:00:00"
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 3.3 更新日记
+
+#### 接口信息
+- **接口路径**: `/api/diary/{id}`
+- **请求方法**: `PUT`
+- **是否需要认证**: 是
+
+#### 请求参数
+**Headers**:
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Path参数**:
+| 参数名 | 类型 | 说明 |
+|-------|------|------|
+| id | Long | 日记ID |
+
+**Body** (JSON):
+```json
+{
+  "title": "今天心情不错（修改后）",
+  "content": "今天天气很好，心情也很棒！",
+  "moodType": 2,
+  "tagIds": [1]
+}
+```
+
+#### 请求字段说明
+| 字段名 | 类型 | 必填 | 说明 |
+|-------|------|------|------|
+| title | String | 否 | 日记标题 |
+| content | String | 否 | 日记内容 |
+| moodType | Integer | 否 | 情绪类型 |
+| weatherType | Integer | 否 | 天气类型 |
+| city | String | 否 | 城市 |
+| isPrivate | Integer | 否 | 是否私密 |
+| tagIds | List<Long> | 否 | 标签ID列表（会覆盖原有标签） |
+
+#### 响应示例
+```json
+{
+  "code": 200,
+  "message": "更新成功",
+  "data": null
+}
+```
+
+---
+
+### 3.4 删除日记
+
+#### 接口信息
+- **接口路径**: `/api/diary/{id}`
+- **请求方法**: `DELETE`
+- **是否需要认证**: 是
+
+#### 请求参数
+**Headers**:
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Path参数**:
+| 参数名 | 类型 | 说明 |
+|-------|------|------|
+| id | Long | 日记ID |
+
+#### 响应示例
+```json
+{
+  "code": 200,
+  "message": "删除成功",
+  "data": null
+}
+```
+
+---
+
+### 3.5 获取日记列表
+
+#### 接口信息
+- **接口路径**: `/api/diary/list`
+- **请求方法**: `GET`
+- **是否需要认证**: 是
+
+#### 请求参数
+**Headers**:
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Query参数**:
+| 参数名 | 类型 | 必填 | 说明 |
+|-------|------|------|------|
+| keyword | String | 否 | 关键词（搜索标题或内容） |
+| moodType | Integer | 否 | 情绪类型筛选 |
+| weatherType | Integer | 否 | 天气类型筛选 |
+| startDate | String | 否 | 开始日期 (yyyy-MM-dd) |
+| endDate | String | 否 | 结束日期 (yyyy-MM-dd) |
+| pageNum | Integer | 否 | 页码 (默认1) |
+| pageSize | Integer | 否 | 每页数量 (默认10) |
+
+#### 响应示例
+```json
+{
+  "code": 200,
+  "message": "操作成功",
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "title": "今天心情不错",
+        "content": "今天天气很好...",
+        "moodType": 1,
+        "weatherType": 1,
+        "city": "北京",
+        "isPrivate": 1,
+        "createTime": "2026-05-16 10:30:00",
+        "updateTime": "2026-05-16 10:30:00",
+        "tags": [
+          {
+            "id": 1,
+            "name": "开心",
+            "color": "#409EFF",
+            "createTime": "2026-05-01 10:00:00"
+          }
+        ]
+      }
+    ],
+    "total": 1,
+    "pageNum": 1,
+    "pageSize": 10
+  }
+}
+```
+
+---
+
+## 4. 标签模块
+
+### 4.1 创建标签
+
+#### 接口信息
+- **接口路径**: `/api/tag`
+- **请求方法**: `POST`
+- **是否需要认证**: 是
+
+#### 请求参数
+**Headers**:
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Body** (JSON):
+```json
+{
+  "name": "开心",
+  "color": "#409EFF"
+}
+```
+
+#### 请求字段说明
+| 字段名 | 类型 | 必填 | 说明 |
+|-------|------|------|------|
+| name | String | 是 | 标签名称 (1-20个字符) |
+| color | String | 否 | 标签颜色 (默认#409EFF) |
+
+#### 响应示例
+```json
+{
+  "code": 200,
+  "message": "创建成功",
+  "data": {
+    "id": 1,
+    "name": "开心",
+    "color": "#409EFF",
+    "createTime": "2026-05-16 10:30:00"
+  }
+}
+```
+
+---
+
+### 4.2 获取标签列表
+
+#### 接口信息
+- **接口路径**: `/api/tag/list`
+- **请求方法**: `GET`
+- **是否需要认证**: 是
+
+#### 请求参数
+**Headers**:
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+#### 响应示例
+```json
+{
+  "code": 200,
+  "message": "操作成功",
+  "data": [
+    {
+      "id": 1,
+      "name": "开心",
+      "color": "#409EFF",
+      "createTime": "2026-05-01 10:00:00"
+    },
+    {
+      "id": 2,
+      "name": "难过",
+      "color": "#F56C6C",
+      "createTime": "2026-05-02 10:00:00"
+    }
+  ]
+}
+```
+
+---
+
+### 4.3 更新标签
+
+#### 接口信息
+- **接口路径**: `/api/tag/{id}`
+- **请求方法**: `PUT`
+- **是否需要认证**: 是
+
+#### 请求参数
+**Headers**:
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Path参数**:
+| 参数名 | 类型 | 说明 |
+|-------|------|------|
+| id | Long | 标签ID |
+
+**Body** (JSON):
+```json
+{
+  "name": "非常开心",
+  "color": "#67C23A"
+}
+```
+
+#### 请求字段说明
+| 字段名 | 类型 | 必填 | 说明 |
+|-------|------|------|------|
+| name | String | 否 | 标签名称 |
+| color | String | 否 | 标签颜色 |
+
+#### 响应示例
+```json
+{
+  "code": 200,
+  "message": "更新成功",
+  "data": null
+}
+```
+
+---
+
+### 4.4 删除标签
+
+#### 接口信息
+- **接口路径**: `/api/tag/{id}`
+- **请求方法**: `DELETE`
+- **是否需要认证**: 是
+
+#### 请求参数
+**Headers**:
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**Path参数**:
+| 参数名 | 类型 | 说明 |
+|-------|------|------|
+| id | Long | 标签ID |
+
+#### 响应示例
+```json
+{
+  "code": 200,
+  "message": "删除成功",
+  "data": null
+}
+```
+
+---
+
 ## 附录: 错误码说明
 
 | 错误码 | 说明 |
