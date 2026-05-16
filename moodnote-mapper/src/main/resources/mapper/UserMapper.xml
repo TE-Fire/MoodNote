@@ -5,11 +5,24 @@
 
     <!-- updateProfile --> 
 
-    <update id="updateProfile">
-        update mood_user
+    <update id="updateProfile" >
+        UPDATE mood_user
         <set>
-            <if test=""></if>
+            <if test="updateProfileDTO.nickname != null and updateProfileDTO.nickname != ''">
+                nickname = #{updateProfileDTO.nickname},
+            </if>
+            <if test="updateProfileDTO.avatar != null">
+                avatar = #{updateProfileDTO.avatar},
+            </if>
+            <if test="updateProfileDTO.phone != null and updateProfileDTO.phone != ''">
+                phone = #{updateProfileDTO.phone},
+            </if>
+            <if test="updateProfileDTO.gender != null">
+                gender = #{updateProfileDTO.gender},
+            </if>
+            update_time = NOW()
         </set>
+        WHERE id = #{id} AND deleted = 0
     </update>
 
 </mapper>
