@@ -32,5 +32,8 @@ public class MessageConstant {
     public static final String LOGOUT_SUCCESS = "退出登录成功";
     public static final String LOGOUT_FAILED = "退出登录失败";
 
+    // =======update===============
+    public static final String UPDATE_PROFILE_ERROR = "更新用户信息失败";
+    public static final String UPDATE_PROFILE_SUCCESS = "更新用户信息成功";
 
 }
