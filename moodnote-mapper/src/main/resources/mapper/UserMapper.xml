@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.moodnote.mapper.UserMapper">
     <!-- insert 方法已在 UserMapper.java 接口中使用 @Insert 注解定义 -->
+
+    <!-- updateProfile --> 
+
+    <update id="updateProfile">
+        update mood_user
+        <set>
+            <if test=""></if>
+        </set>
+    </update>
+
 </mapper>

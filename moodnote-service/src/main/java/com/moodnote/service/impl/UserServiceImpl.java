@@ -9,6 +9,7 @@ import com.moodnote.common.exception.BusinessException;
 import com.moodnote.common.exception.ErrorCode;
 import com.moodnote.common.utils.Result;
 import com.moodnote.mapper.UserMapper;
+import com.moodnote.pojo.dto.UpdateProfileDTO;
 import com.moodnote.pojo.entity.User;
 import com.moodnote.pojo.vo.UserVO;
 import com.moodnote.service.UserService;
@@ -31,5 +32,15 @@ public class UserServiceImpl implements UserService{
         }
         BeanUtils.copyProperties(user, userVO);
         return Result.success(userVO);
+    }
+
+
+    @Override
+    public Result<Void> updateProfile(Long userId, UpdateProfileDTO updateProfileDTO) {
+        if (userMapper.updateProfile(userId, updateProfileDTO)) {
+            return Result.success(MessageConstant.UPDATE_PROFILE_SUCCESS);
+        } else {
+            return Result.error(MessageConstant.UPDATE_PROFILE_ERROR);
+        }
     }
 }

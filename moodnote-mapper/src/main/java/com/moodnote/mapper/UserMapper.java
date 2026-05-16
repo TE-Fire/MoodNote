@@ -1,5 +1,6 @@
 package com.moodnote.mapper;
 
+import com.moodnote.pojo.dto.UpdateProfileDTO;
 import com.moodnote.pojo.entity.User;
 
 import org.apache.ibatis.annotations.Insert;
@@ -40,4 +41,6 @@ public interface UserMapper {
     // language=sql
     @Select("select * from mood_user where id = #{userId} and deleted = 0")
     User getUserById(Long userId);
+
+    boolean updateProfile(@Param("id") Long userId, @Param("updateProfileDTO") UpdateProfileDTO updateProfileDTO);
 }
