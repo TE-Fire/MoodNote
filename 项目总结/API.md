@@ -336,6 +336,11 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
+**说明**：
+- 本接口**不需要额外的请求参数**
+- 用户身份通过请求头中的 `Authorization` Token 自动识别
+- 每个用户只能获取自己的信息，无法访问其他用户数据
+
 #### 响应示例
 ```json
 {

@@ -1,6 +1,7 @@
 package com.moodnote.mapper;
 
 import com.moodnote.pojo.entity.User;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,4 +36,8 @@ public interface UserMapper {
     // language=SQL
     @Update("update mood_user set password = #{newPassword} where email = #{email} and deleted = 0")
     void resetPassword(@Param("email") String email, @Param("newPassword") String newPassword);
+
+    // language=sql
+    @Select("select * from mood_user where id = #{userId} and deleted = 0")
+    User getUserById(Long userId);
 }
