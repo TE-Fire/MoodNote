@@ -1,9 +1,11 @@
 package com.moodnote.pojo.dto;
 
+import com.moodnote.pojo.entity.BaseEntity;
+
 import lombok.Data;
 
 @Data
-public class UpdateProfileDTO {
+public class UpdateProfileDTO extends BaseEntity{
 
     private String nickname;
     private String avatar;

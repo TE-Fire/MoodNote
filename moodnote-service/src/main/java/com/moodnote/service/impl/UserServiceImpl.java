@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public Result<Void> updateProfile(Long userId, UpdateProfileDTO updateProfileDTO) {
-        if (userMapper.updateProfile(userId, updateProfileDTO)) {
+    public Result<Void> updateProfile(UpdateProfileDTO updateProfileDTO, Long userId) {
+        if (userMapper.updateProfile(updateProfileDTO, userId)) {
             return Result.success(MessageConstant.UPDATE_PROFILE_SUCCESS);
         } else {
             return Result.error(MessageConstant.UPDATE_PROFILE_ERROR);

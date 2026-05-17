@@ -19,6 +19,6 @@ public interface UserService {
      * @param updateProfileDTO
      * @return
      */
-    Result<Void> updateProfile(Long userId, UpdateProfileDTO updateProfileDTO);
+    Result<Void> updateProfile(UpdateProfileDTO updateProfileDTO, Long userId);
     
 }

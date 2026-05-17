@@ -1,5 +1,7 @@
 package com.moodnote.mapper;
 
+import com.moodnote.common.annotation.AutoFill;
+import com.moodnote.common.enums.OperationType;
 import com.moodnote.pojo.dto.UpdateProfileDTO;
 import com.moodnote.pojo.entity.User;
 
@@ -24,6 +26,7 @@ public interface UserMapper {
     // language=SQL
     @Insert("INSERT INTO mood_user (email, password, nickname, username, avatar, phone, gender, create_time, update_time, deleted) " +
             "VALUES (#{email}, #{password}, #{nickname}, #{username}, #{avatar}, #{phone}, #{gender}, #{createTime}, #{updateTime}, #{deleted})")
+    @AutoFill(value = OperationType.INSERT)
     int insert(User user);
 
     // language=SQL
@@ -42,5 +45,6 @@ public interface UserMapper {
     @Select("select * from mood_user where id = #{userId} and deleted = 0")
     User getUserById(Long userId);
 
-    boolean updateProfile(@Param("id") Long userId, @Param("updateProfileDTO") UpdateProfileDTO updateProfileDTO);
+    @AutoFill(OperationType.UPDATE)
+    boolean updateProfile(@Param("updateProfileDTO") UpdateProfileDTO updateProfileDTO, @Param("id") Long userId);
 }

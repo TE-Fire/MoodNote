@@ -169,8 +169,6 @@ public class AuthServiceImpl implements AuthService {
         user.setNickname(registerDTO.getNickname() != null ? registerDTO.getNickname() : registerDTO.getUsername());
         user.setAvatar(null);
         user.setGender(0);
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
         user.setDeleted(0);
 
         // 5. 保存到数据库
