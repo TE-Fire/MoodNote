@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.moodnote.common.annotation.LogOperation;
+import com.moodnote.common.enums.Action;
+import com.moodnote.common.enums.Module;
 import com.moodnote.common.utils.Result;
 import com.moodnote.pojo.dto.UpdateProfileDTO;
 import com.moodnote.pojo.vo.UserVO;
@@ -31,9 +34,10 @@ public class UserController {
     }
 
     @PutMapping("/profile")
+    @LogOperation(module = Module.USER, action = Action.UPDATE_PROFILE)
     public Result<Void> updateProfile(HttpServletRequest request, @RequestBody UpdateProfileDTO updateProfileDTO) {
         Long userId = (Long) request.getAttribute("userId");
         log.info("更新用户信息，用户ID: {}", userId);
-        return userService.updateProfile(userId, updateProfileDTO);
+        return userService.updateProfile(updateProfileDTO, userId);
     }
 }
