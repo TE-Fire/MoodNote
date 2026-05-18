@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.moodnote.common.annotation.AutoFill;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
+@Order(1)
 @Aspect
 public class AutoFillAspect {
     
