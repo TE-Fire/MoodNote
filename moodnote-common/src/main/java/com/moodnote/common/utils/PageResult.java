@@ -11,19 +11,17 @@ public class PageResult<T> implements Serializable {
 
     private long total;
     private int pageSize;
-    private int current;
-    private int pages;
-    private List<T> records;
+    private int pageNum;
+    private List<T> list;
 
-    public PageResult(long total, int pageSize, int current, List<T> records) {
+    public PageResult(long total, int pageSize, int pageNum, List<T> list) {
         this.total = total;
         this.pageSize = pageSize;
-        this.current = current;
-        this.records = records;
-        this.pages = (int) Math.ceil((double) total / pageSize);
+        this.pageNum = pageNum;
+        this.list = list;
     }
 
-    public static <T> PageResult<T> build(long total, int pageSize, int current, List<T> records) {
-        return new PageResult<>(total, pageSize, current, records);
+    public static <T> PageResult<T> build(long total, int pageSize, int pageNum, List<T> list) {
+        return new PageResult<>(total, pageSize, pageNum, list);
     }
 }
