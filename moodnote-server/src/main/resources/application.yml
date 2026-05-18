@@ -72,6 +72,15 @@ mybatis:
   # MyBatis 配置文件路径
   config-location: classpath:mybatis-config.xml
 
+# ==================== PageHelper 分页插件配置 ====================
+pagehelper:
+  # 指定分页方言，auto 表示自动检测数据库类型
+  helperDialect: mysql
+  # 启用合理化分页（当 pageNum 超出范围时自动调整）
+  reasonable: true
+  # 传递分页参数的名称
+  params: count=countSql
+
 # ==================== 服务器配置 ====================
 server:
   # 服务端口号
