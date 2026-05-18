@@ -15,12 +15,14 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.moodnote.common.annotation.LogOperation;
+import com.moodnote.common.constant.MessageConstant;
 import com.moodnote.common.constant.RedisKeyConstant;
 import com.moodnote.common.enums.Action;
 import com.moodnote.common.enums.Module;
 
 import com.moodnote.common.records.OperationLogRecord;
 import com.moodnote.common.utils.RedisUtil;
+import com.moodnote.common.utils.Result;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,7 +54,7 @@ public class OperationLogAspect {
         // 从请求属性中获取个人信息
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
-            return null;
+            return Result.error(MessageConstant.REQUEST_ATTRIBUTE_ERROR);
         }
         Long userId = (Long) attributes.getRequest().getAttribute("userId");
 
