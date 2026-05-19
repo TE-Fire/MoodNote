@@ -15,4 +15,11 @@ public interface TagMapper {
      * @return
      */
     List<TagVO> selectTagsByDiaryId(@Param("diaryId") Long diaryId);
+
+    /**
+     * 根据多个日记ID批量查询标签列表
+     * @param diaryIds
+     * @return
+     */
+    List<TagVO> selectTagsByDiaryIds(@Param("diaryIds") List<Long> diaryIds);
 }
