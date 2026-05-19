@@ -2,13 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.moodnote.mapper.DiaryMapper">
 
-    <!-- 基础字段 -->
     <sql id="diaryBaseColumns">
         d.id, d.user_id, d.title, d.content, d.mood_type, d.weather_type, 
         d.city, d.is_private, d.create_time, d.update_time
     </sql>
 
-    <!-- 查询日记列表（带动态条件） - PageHelper会自动分页 -->
     <select id="selectDiaryList" resultType="com.moodnote.pojo.entity.Diary">
         SELECT 
             <include refid="diaryBaseColumns"/>
@@ -34,7 +32,6 @@
         ORDER BY d.create_time DESC
     </select>
 
-    <!-- 根据ID查询日记 -->
     <select id="selectDiaryById" resultType="com.moodnote.pojo.entity.Diary">
         SELECT 
             <include refid="diaryBaseColumns"/>
@@ -43,5 +40,16 @@
           AND d.user_id = #{userId}
           AND d.deleted = 0
     </select>
+
+    <insert id="createDiary" parameterType="com.moodnote.pojo.entity.Diary"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO mood_diary (
+            user_id, title, content, mood_type, weather_type,
+            city, is_private, create_time, update_time
+        ) VALUES (
+            #{userId}, #{title}, #{content}, #{moodType}, #{weatherType},
+            #{city}, #{isPrivate}, NOW(), NOW()
+        )
+    </insert>
 
 </mapper>
