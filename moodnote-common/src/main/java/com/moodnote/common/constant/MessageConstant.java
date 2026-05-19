@@ -38,6 +38,10 @@ public class MessageConstant {
     public static final String UPDATE_PROFILE_ERROR = "更新用户信息失败";
     public static final String UPDATE_PROFILE_SUCCESS = "更新用户信息成功";
 
+    // ===========create=============
+    public static final String CREATE_DIARY_ERROR = "创建日记失败";
+
+
     // ===========autoFillAspect==================
     public static final String INSERT_AUTO_FILL_ERROR = "插入操作AOP自动填充失败";
     public static final String UPDATE_AUTO_FILL_ERROR = "更新操作AOP自动填充失败";
