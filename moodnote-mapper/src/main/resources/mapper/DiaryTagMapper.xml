@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moodnote.mapper.DiaryTagMapper">
+
+    <!-- 批量插入日记-标签关联 -->
+    <insert id="batchInsert">
+        INSERT INTO mood_diary_tag (diary_id, tag_id, create_time, update_time)
+        VALUES
+        <foreach collection="tagIds" item="tagId" separator=",">
+            (#{diaryId}, #{tagId}, NOW(), NOW())
+        </foreach>
+    </insert>
+
+    <!-- 根据日记ID删除关联（软删除） -->
+    <update id="deleteByDiaryId">
+        UPDATE mood_diary_tag
+        SET deleted = 1, update_time = NOW()
+        WHERE diary_id = #{diaryId}
+          AND deleted = 0
+    </update>
+
+</mapper>
