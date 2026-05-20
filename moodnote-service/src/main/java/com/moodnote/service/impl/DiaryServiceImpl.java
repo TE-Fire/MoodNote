@@ -10,6 +10,7 @@ import com.moodnote.mapper.DiaryTagMapper;
 import com.moodnote.mapper.TagMapper;
 import com.moodnote.pojo.dto.DiaryCreateDTO;
 import com.moodnote.pojo.dto.DiaryQueryDTO;
+import com.moodnote.pojo.dto.DiaryUpdateDTO;
 import com.moodnote.pojo.entity.Diary;
 import com.moodnote.pojo.vo.DiaryVO;
 import com.moodnote.pojo.vo.TagVO;
@@ -94,6 +95,45 @@ public class DiaryServiceImpl implements DiaryService {
         return Result.success(diaryVO);
     }
 
+    @Override
+    public Result<DiaryVO> getDetail(Long id) {
+        Diary diary = diaryMapper.selectDiaryById(id, getCurrentUserId());
+        DiaryVO diaryVO = convertToVO(diary);
+        return diaryVO != null ? Result.success(diaryVO) : Result.error(MessageConstant.DIARY_NOT_FOUND);
+    }
+
+    @Override
+    public Result<Void> updateDiary(DiaryUpdateDTO diaryUpdateDTO, Long id) {
+        Long userId = getCurrentUserId();
+        Diary existing = diaryMapper.selectDiaryById(id, userId);
+        if (existing == null) {
+            return Result.error(MessageConstant.DIARY_NOT_FOUND);
+        }
+
+        Diary diary = new Diary();
+        BeanUtils.copyProperties(diaryUpdateDTO, diary);
+        diary.setId(id);
+        diary.setUserId(userId);
+        diaryMapper.updateDiary(diary);
+
+        // 删除旧的标签关联
+        diaryTagMapper.deleteByDiaryId(id);
+        // 插入新的标签关联
+        if (diaryUpdateDTO.getTagIds() != null && !diaryUpdateDTO.getTagIds().isEmpty()) {
+            diaryTagMapper.batchInsert(id, diaryUpdateDTO.getTagIds());
+        }
+
+        Diary updateDiary = diaryMapper.selectDiaryById(id, userId);
+        if (updateDiary == null) {
+            return Result.error(MessageConstant.UPDATE_DIARY_ERROR);
+        }
+        return Result.success(MessageConstant.UPDATE_DIARY_SUCCESS);
+    }
+    /**
+     * 将日记实体转换为VO
+     * @param diary
+     * @return
+     */
     private DiaryVO convertToVO(Diary diary) {
         DiaryVO vo = new DiaryVO();
         BeanUtils.copyProperties(diary, vo);
@@ -104,6 +144,10 @@ public class DiaryServiceImpl implements DiaryService {
         return vo;
     }
 
+    /**
+     * 获取当前登录用户id
+     * @return
+     */
     private Long getCurrentUserId() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {

@@ -4,6 +4,7 @@ import com.moodnote.common.utils.PageResult;
 import com.moodnote.common.utils.Result;
 import com.moodnote.pojo.dto.DiaryCreateDTO;
 import com.moodnote.pojo.dto.DiaryQueryDTO;
+import com.moodnote.pojo.dto.DiaryUpdateDTO;
 import com.moodnote.pojo.vo.DiaryVO;
 
 public interface DiaryService {
@@ -21,5 +22,14 @@ public interface DiaryService {
      * @return
      */
     Result<DiaryVO> createDiary(DiaryCreateDTO diaryCreateDTO);
+
+    /**
+     * 获取日记详情
+     * @param id
+     * @return
+     */
+    Result<DiaryVO> getDetail(Long id);
+
+    Result<Void> updateDiary(DiaryUpdateDTO diaryUpdateDTO, Long id);
     
 }
