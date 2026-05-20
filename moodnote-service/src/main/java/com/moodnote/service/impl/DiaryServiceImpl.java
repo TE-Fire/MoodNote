@@ -19,6 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,6 +105,14 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     private Long getCurrentUserId() {
-        return 1L;
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            Long userId = (Long) request.getAttribute("userId");
+            if (userId != null) {
+                return userId;
+            }
+        }
+        throw new IllegalStateException(MessageConstant.USER_NOT_LOGIN);
     }
 }

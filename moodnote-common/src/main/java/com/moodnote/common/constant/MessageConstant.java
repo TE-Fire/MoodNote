@@ -23,6 +23,7 @@ public class MessageConstant {
     public static final String UNAUTHORIZED = "未授权，请先登录";
     public static final String TOKEN_BLACKLIST = "用户已登出，请重新登录";
     public static final String USERNAME_NOT_FOUND = "用户名不存在";
+    public static final String USER_NOT_LOGIN = "用户未登录，请先登录";
     public static final String PASSWORD_ERROR = "密码错误";
 
     public static final String LOGIN = "login";
