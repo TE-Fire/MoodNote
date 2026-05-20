@@ -38,6 +38,8 @@ public class MessageConstant {
     // =======update===============
     public static final String UPDATE_PROFILE_ERROR = "更新用户信息失败";
     public static final String UPDATE_PROFILE_SUCCESS = "更新用户信息成功";
+    public static final String UPDATE_DIARY_ERROR = "更新日记失败";
+    public static final String UPDATE_DIARY_SUCCESS = "更新日记成功";
 
     // ===========create=============
     public static final String CREATE_DIARY_ERROR = "创建日记失败";
@@ -46,6 +48,9 @@ public class MessageConstant {
     // ===========autoFillAspect==================
     public static final String INSERT_AUTO_FILL_ERROR = "插入操作AOP自动填充失败";
     public static final String UPDATE_AUTO_FILL_ERROR = "更新操作AOP自动填充失败";
+
+    // ================select==================
+    public static final String DIARY_NOT_FOUND = "日记不存在";
 
 
 }
