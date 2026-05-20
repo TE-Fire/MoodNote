@@ -52,4 +52,21 @@
         )
     </insert>
 
+    <!-- updateDiary --> 
+
+    <update id="updateDiary" parameterType="com.moodnote.pojo.enity.Diary">
+        UPDATE mood_diary 
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="moodType != null">mood_type = #{moodType},</if>
+            <if test="weatherType != null">weather_type = #{weatherType},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="isPrivate != null">is_private = #{isPrivate},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+          AND user_id = #{userId}
+          AND deleted = 0
+    </update>
 </mapper>

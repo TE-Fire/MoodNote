@@ -19,4 +19,6 @@ public interface DiaryMapper {
     Diary selectDiaryById(@Param("id") Long id, @Param("userId") Long userId);
 
     int createDiary(Diary diary);
+
+    void updateDiary(Diary diary);
 }
